@@ -2,17 +2,21 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <functional> // std::less
 
-void gen(int* arr, const int size)
+// array generator for int/float T
+template <typename T>
+void gen(T* arr, const int size)
 {
     srand(clock());
-    for (int* i = arr; i < arr + size; ++i)
+    for (T* i = arr; i < arr + size; ++i)
         *i = rand() % 10;
 }
 
-void out(const int* arr, const int size)
+template <typename T>
+void out(const T* arr, const int size)
 {
-    for (const int* i = arr; i < arr + size; ++i)
+    for (const T* i = arr; i < arr + size; ++i)
     {
         std::cout << *i << ' ';
         if (*i < 10) std::cout << ' ';
@@ -20,34 +24,37 @@ void out(const int* arr, const int size)
     std::cout << '\n';
 }
 
-bool check(const int* arr, const int size)
+template <typename T, typename Compare>
+bool check(const T* arr, const int size, Compare comp)
 {
-    for (const int* i = arr; i < arr + size - 1; ++i)
-        if (*i > *(i + 1))
+    for (const T* i = arr; i < arr + size - 1; ++i)
+        if (comp(*(i + 1), *i))
             return false;
     return true;
 }
 
-void swap(int &a, int &b)
+template <typename T>
+void swap(T &a, T &b)
 {
-    int tmp = a;
+    T tmp = a;
     a = b;
     b = tmp;
 }
 
-void qsort(int* arr, const int start, const int end)
+template <typename T, typename Compare>
+void qSort(T* arr, const int start, const int end, Compare comp)
 {
     if (start >= end) return;
 
     int l = start;
     int r = end;
 
-    int X = arr[start + (end - start) / 2];
+    T pivot = arr[start + (end - start) / 2];
 
     while (l <= r)
     {
-        while (arr[l] < X) ++l;
-        while (arr[r] > X) --r;
+        while (comp(arr[l], pivot)) ++l;
+        while (comp(pivot, arr[r])) --r;
 
         if (l <= r)
         {
@@ -57,23 +64,23 @@ void qsort(int* arr, const int start, const int end)
         }
     }
 
-    qsort(arr, start, r);
-    qsort(arr, l, end);
+    qSort(arr, start, r, comp);
+    qSort(arr, l, end, comp);
 }
 
 
 int main()
 {
-    int size = 10;
+    const int size = 10;
     int* arr = new int[size]();
 
     gen(arr, size);
     out(arr, size);
 
-    qsort(arr, 0, size - 1);
+    qSort(arr, 0, size - 1, std::less<int>());
     out(arr, size);
 
-    if (!check(arr, size)) return 1;
+    if (!check(arr, size, std::less<int>())) return 1;
     
     return 0;
 }
