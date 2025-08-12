@@ -1,7 +1,7 @@
 
 #include <iostream>
-#include "stdlib.h"
-#include "time.h"
+#include <cstdlib>
+#include <ctime>
 
 void gen(int* arr, const int size)
 {
@@ -28,21 +28,52 @@ bool check(const int* arr, const int size)
     return true;
 }
 
-void qsort(int* arr, const int size)
+void swap(int &a, int &b)
 {
-    // ...
-    
-    return;
+    int tmp = a;
+    a = b;
+    b = tmp;
 }
+
+void qsort(int* arr, const int start, const int end)
+{
+    if (start >= end) return;
+
+    int l = start;
+    int r = end;
+
+    int X = arr[start + (end - start) / 2];
+
+    while (l <= r)
+    {
+        while (arr[l] < X) ++l;
+        while (arr[r] > X) --r;
+
+        if (l <= r)
+        {
+            swap (arr[l], arr[r]);
+            ++l;
+            --r;
+        }
+    }
+
+    qsort(arr, start, r);
+    qsort(arr, l, end);
+}
+
 
 int main()
 {
     int size = 10;
     int* arr = new int[size]();
 
-    out(arr, size);
     gen(arr, size);
     out(arr, size);
+
+    qsort(arr, 0, size - 1);
+    out(arr, size);
+
+    if (!check(arr, size)) return 1;
     
     return 0;
 }
