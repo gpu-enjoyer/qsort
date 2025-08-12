@@ -1,7 +1,7 @@
 
 MAKEFLAGS += s
 
-CXXFLAGS += -std=c++98 #
+CXXFLAGS += -std=c++11 #
 CXXFLAGS += -Wall
 
 all: clean build run

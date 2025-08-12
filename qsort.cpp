@@ -1,8 +1,11 @@
 
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
+#include <iostream>   // check result
+#include <cstdlib>    // rand()
+#include <ctime>      // rand() seed
 #include <functional> // std::less
+#include <thread>     // parallel
+
+#define PAR_THRESH 3  // 100
 
 // array generator for int/float T
 template <typename T>
@@ -64,8 +67,17 @@ void qSort(T* arr, const int start, const int end, Compare comp)
         }
     }
 
-    qSort(arr, start, r, comp);
-    qSort(arr, l, end, comp);
+    if (r - start > PAR_THRESH && end - l > PAR_THRESH)
+    {
+        std::thread leftThread(qSort<T, Compare>, arr, start, r, comp);
+        qSort(arr, l, end, comp);
+        leftThread.join();
+    }
+    else
+    {
+        qSort(arr, start, r, comp);
+        qSort(arr, l, end, comp);
+    }
 }
 
 
