@@ -5,7 +5,7 @@
 #include <functional> // std::less
 #include <thread>     // parallel
 
-#define PAR_THRESH 3  // 100
+#define PAR_THRESH 100
 
 // array generator for int/float T
 template <typename T>
@@ -24,7 +24,7 @@ void out(const T* arr, const int size)
         std::cout << *i << ' ';
         if (*i < 10) std::cout << ' ';
     }
-    std::cout << '\n';
+    std::cout << "\n\n";
 }
 
 template <typename T, typename Compare>
@@ -83,7 +83,7 @@ void qSort(T* arr, const int start, const int end, Compare comp)
 
 int main()
 {
-    const int size = 10;
+    const int size = 200;
     int* arr = new int[size]();
 
     gen(arr, size);
