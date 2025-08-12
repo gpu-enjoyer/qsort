@@ -1,9 +1,16 @@
 
+### how to run
+
+``` shell
+make
+```
+
 ### todo
 
 - [x] qsort
 - [x] обобщенный
 - [x] параллельный
+- [x] тесты
 
 ### task
 
